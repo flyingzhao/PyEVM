@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
-import scipy.signal
+import scipy.signal as signal
+import scipy.fftpack as fftpack
 
 
 #convert RBG to YIQ
@@ -43,6 +44,7 @@ def build_laplacian_pyramid(src,levels=3):
         pyramid.append(L)
     return pyramid
 
+#load video from file
 def load_video(video_filename):
     cap=cv2.VideoCapture(video_filename)
     frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -57,13 +59,21 @@ def load_video(video_filename):
             x+=1
         else:
             break
-    return video_tensor
+    return video_tensor,fps
 
-
-
-
+def temporal_ideal_filter(tensor,low,high,fps):
+    fft=fftpack.fft(tensor,axis=0)
+    frequencies = fftpack.fftfreq(tensor.shape[0], d=1.0 / fps)
+    bound_low = (np.abs(frequencies - low)).argmin()
+    bound_high = (np.abs(frequencies - high)).argmin()
+    fft[:bound_low] = 0
+    fft[bound_high:-bound_high] = 0
+    fft[-bound_low:] = 0
+    return fftpack.ifft(fft, axis=0)
 
 
 
 if __name__=="__main__":
-    load_video("baby.mp4")
+    t,f=load_video("baby.mp4")
+    a=temporal_ideal_filter(t,0.4,3,f)
+

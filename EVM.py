@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+import scipy.signal
+
 
 #convert RBG to YIQ
 def rgb2ntsc(src):
@@ -43,19 +45,24 @@ def build_laplacian_pyramid(src,levels=3):
 
 def load_video(video_filename):
     cap=cv2.VideoCapture(video_filename)
-    frame_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-    width, height = cap.get(cv2.CAP_PROP_FRAME_WIDTH),cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    print(frame_count,width,height,fps)
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    width, height = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fps = int(cap.get(cv2.CAP_PROP_FPS))
+    video_tensor=np.zeros((frame_count,height,width,3))
+    x=0
     while cap.isOpened():
         ret,frame=cap.read()
         if ret is True:
-            cv2.imshow("a",frame)
-            cv2.waitKey(30)
+            video_tensor[x]=frame
+            x+=1
         else:
             break
-    cap.release()
-    cv2.destroyAllWindows()
+    return video_tensor
+
+
+
+
+
 
 
 if __name__=="__main__":

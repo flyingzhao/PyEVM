@@ -71,9 +71,47 @@ def temporal_ideal_filter(tensor,low,high,fps):
     fft[-bound_low:] = 0
     return fftpack.ifft(fft, axis=0)
 
+def gaussian_video(video_tensor,levels=3):
+    for i in range(0,video_tensor.shape[0]):
+        frame=video_tensor[0]
+        pyr=build_gaussian_pyramid(frame)
+        gaussian_frame=pyr[-1]
+        if i==0:
+            vid_data=np.zeros((video_tensor.shape[0],gaussian_frame.shape[0],gaussian_frame.shape[1],3))
+        vid_data[i]=gaussian_frame
+    return vid_data
 
+def amplify_video(gaussian_vid,amplification=50):
+    return gaussian_vid*1
+
+def reconstract_video(amp_video,origin_video,levels=3):
+    final_video=np.zeros(origin_video.shape)
+    for i in range(0,amp_video.shape[0]):
+        img = np.ndarray(shape=amp_video[i].shape, dtype='float')
+        img[:] = amp_video[i]
+        for x in range(levels):
+            img=cv2.pyrUp(img)
+        img=img+origin_video[i]
+        final_video[i]=img
+
+    return final_video
+
+def save_video(video_tensor):
+    fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
+    [height,width]=video_tensor[0].shape[0:2]
+    writer = cv2.VideoWriter("out.avi", fourcc, 30, (width, height), 1)
+    for i in range(0,video_tensor.shape[0]):
+        writer.write(video_tensor[0])
+    writer.release()
+
+def magnify_color():
+    t,f=load_video("baby.mp4")
+    gau_video=gaussian_video(t)
+    filtered_tensor=temporal_ideal_filter(gau_video,0.4,3,f)
+    amplified_video=amplify_video(filtered_tensor)
+    final=reconstract_video(amplified_video,t)
+    save_video(final)
 
 if __name__=="__main__":
-    t,f=load_video("baby.mp4")
-    a=temporal_ideal_filter(t,0.4,3,f)
+    magnify_color()
 

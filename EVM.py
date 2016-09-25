@@ -50,7 +50,7 @@ def load_video(video_filename):
     frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     width, height = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = int(cap.get(cv2.CAP_PROP_FPS))
-    video_tensor=np.zeros((frame_count,height,width,3))
+    video_tensor=np.zeros((frame_count,height,width,3),dtype='float')
     x=0
     while cap.isOpened():
         ret,frame=cap.read()
@@ -61,20 +61,39 @@ def load_video(video_filename):
             break
     return video_tensor,fps
 
-def temporal_ideal_filter(tensor,low,high,fps):
-    fft=fftpack.fft(tensor,axis=0)
+def temporal_ideal_filter(tensor,low,high,fps,axis=0):
+    fft=fftpack.fft(tensor,axis=axis)
     frequencies = fftpack.fftfreq(tensor.shape[0], d=1.0 / fps)
     bound_low = (np.abs(frequencies - low)).argmin()
     bound_high = (np.abs(frequencies - high)).argmin()
     fft[:bound_low] = 0
     fft[bound_high:-bound_high] = 0
     fft[-bound_low:] = 0
-    return fftpack.ifft(fft, axis=0)
+    iff=fftpack.ifft(fft, axis=axis)
+    return np.abs(iff)
+
+def ideal_filter(tensor,low,high,fps,):
+    [length,rows,cols,channel]=tensor.shape
+    ifft=np.zeros((length,rows,cols,channel))
+    for i in range(rows):
+       for j in range(cols):
+           for k in range(channel):
+                f=fftpack.fft(tensor[:,i,j,k])
+                frequencies = fftpack.fftfreq(tensor.shape[0], d=1.0 / fps)
+                bound_low = (np.abs(frequencies - low)).argmin()
+                bound_high = (np.abs(frequencies - high)).argmin()
+                f[:bound_low] = 0
+                f[bound_high:-bound_high] = 0
+                f[-bound_low:] = 0
+                iff=fftpack.ifft(f)
+                ifft[:,i,j,k]=np.abs(iff)
+    return ifft
+
 
 def gaussian_video(video_tensor,levels=3):
     for i in range(0,video_tensor.shape[0]):
-        frame=video_tensor[0]
-        pyr=build_gaussian_pyramid(frame)
+        frame=video_tensor[i]
+        pyr=build_gaussian_pyramid(frame,level=levels)
         gaussian_frame=pyr[-1]
         if i==0:
             vid_data=np.zeros((video_tensor.shape[0],gaussian_frame.shape[0],gaussian_frame.shape[1],3))
@@ -82,18 +101,18 @@ def gaussian_video(video_tensor,levels=3):
     return vid_data
 
 def amplify_video(gaussian_vid,amplification=50):
-    return gaussian_vid*1
+    return gaussian_vid*amplification
 
 def reconstract_video(amp_video,origin_video,levels=3):
     final_video=np.zeros(origin_video.shape)
+    [height,width]=origin_video[0].shape[0:2]
     for i in range(0,amp_video.shape[0]):
         img = np.ndarray(shape=amp_video[i].shape, dtype='float')
         img[:] = amp_video[i]
         for x in range(levels):
             img=cv2.pyrUp(img)
-        img=img+origin_video[i]
-        final_video[i]=img
-
+        img[:height,:width]=img[:height,:width]+origin_video[i]
+        final_video[i]=cv2.convertScaleAbs(img[:height,:width])
     return final_video
 
 def save_video(video_tensor):
@@ -101,15 +120,19 @@ def save_video(video_tensor):
     [height,width]=video_tensor[0].shape[0:2]
     writer = cv2.VideoWriter("out.avi", fourcc, 30, (width, height), 1)
     for i in range(0,video_tensor.shape[0]):
-        writer.write(video_tensor[0])
+        writer.write(cv2.convertScaleAbs(video_tensor[i]))#import bug
     writer.release()
 
 def magnify_color():
     t,f=load_video("baby.mp4")
-    gau_video=gaussian_video(t)
+    gau_video=gaussian_video(t,levels=3)
+    print(gau_video[:,1,1,1])
     filtered_tensor=temporal_ideal_filter(gau_video,0.4,3,f)
+    print(filtered_tensor[:,1,1,1])
     amplified_video=amplify_video(filtered_tensor)
-    final=reconstract_video(amplified_video,t)
+    print(amplified_video[:,1,1,1])
+    final=reconstract_video(amplified_video,t,levels=3)
+    print(final[:,1,1,1])
     save_video(final)
 
 if __name__=="__main__":

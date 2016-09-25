@@ -55,7 +55,7 @@ def load_video(video_filename):
     while cap.isOpened():
         ret,frame=cap.read()
         if ret is True:
-            video_tensor[x]=frame
+            video_tensor[x]=rgb2ntsc(frame)
             x+=1
         else:
             break
@@ -105,7 +105,7 @@ def save_video(video_tensor):
     [height,width]=video_tensor[0].shape[0:2]
     writer = cv2.VideoWriter("out.avi", fourcc, 30, (width, height), 1)
     for i in range(0,video_tensor.shape[0]):
-        writer.write(cv2.convertScaleAbs(video_tensor[i]))
+        writer.write(cv2.convertScaleAbs(ntsc2rbg(video_tensor[i])))
     writer.release()
 
 def magnify_color():

@@ -37,7 +37,7 @@ def build_gaussian_pyramid(src,level=3):
 def build_laplacian_pyramid(src,levels=3):
     gaussianPyramid = build_gaussian_pyramid(src, levels)
     s=src.copy()
-    pyramid=[gaussianPyramid[levels]]
+    pyramid=[]
     for i in range(levels,0,-1):
         GE=cv2.pyrUp(gaussianPyramid[i])
         L=cv2.subtract(gaussianPyramid[i-1],GE)
@@ -55,7 +55,7 @@ def load_video(video_filename):
     while cap.isOpened():
         ret,frame=cap.read()
         if ret is True:
-            video_tensor[x]=rgb2ntsc(frame)
+            video_tensor[x]=frame
             x+=1
         else:
             break
@@ -105,7 +105,7 @@ def save_video(video_tensor):
     [height,width]=video_tensor[0].shape[0:2]
     writer = cv2.VideoWriter("out.avi", fourcc, 30, (width, height), 1)
     for i in range(0,video_tensor.shape[0]):
-        writer.write(cv2.convertScaleAbs(ntsc2rbg(video_tensor[i])))
+        writer.write(cv2.convertScaleAbs(video_tensor[i]))
     writer.release()
 
 def magnify_color():
@@ -116,6 +116,63 @@ def magnify_color():
     final=reconstract_video(amplified_video,t,levels=3)
     save_video(final)
 
-if __name__=="__main__":
-    magnify_color()
+def laplacian_video(video_tensor,levels=3):
+    for i in range(0,video_tensor.shape[0]):
+        frame=video_tensor[i]
+        pyr=build_laplacian_pyramid(frame,levels=levels)
+        l1=pyr[0]
+        l2=pyr[1]
+        l3=pyr[2]
+        if i==0:
+            vid_1=np.zeros((video_tensor.shape[0],l1.shape[0],l1.shape[1],3))
+            vid_2=np.zeros((video_tensor.shape[0],l2.shape[0],l2.shape[1],3))
+            vid_3 = np.zeros((video_tensor.shape[0], l3.shape[0], l3.shape[1], 3))
+        vid_1[i] = l1
+        vid_2[i] = l2
+        vid_3[i] = l3
+    print(vid_1.shape)
+    tensor_list=[vid_1,vid_2,vid_3]
+    return tensor_list
 
+def iir_filter(lap_tensor):
+    return butter_bandpass_filter(lap_tensor,0.4,3,30)
+
+def butter_bandpass(lowcut, highcut, fs, order=5):
+    nyq = 0.5 * fs
+    low = lowcut / nyq
+    high = highcut / nyq
+    b, a = signal.butter(order, [low, high], btype='band')
+    return b, a
+
+def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
+    b, a = butter_bandpass(lowcut, highcut, fs, order=order)
+    y = signal.lfilter(b, a, data, axis=0)
+    return y
+
+def reconstrct_from_tensorlist(filter_tensor_list):
+    final=np.zeros(filter_tensor_list[2].shape)
+    for i in range(filter_tensor_list[0].shape[0]):
+        up=cv2.pyrUp(filter_tensor_list[0][i])
+        up=up+filter_tensor_list[1][i]
+        up=cv2.pyrUp(up)
+        up=up+filter_tensor_list[2][i]
+        final[i]=up
+    return final
+
+
+
+def magnify_motion():
+    t,f=load_video("baby.mp4")
+    lap_video_list=laplacian_video(t,levels=3)
+    filter_tensor_list=[]
+    for i in range(3):
+        filter_tensor=iir_filter(lap_video_list[i])
+        filter_tensor*=20
+        filter_tensor_list.append(filter_tensor)
+    recon=reconstrct_from_tensorlist(filter_tensor_list)
+    final=t+recon
+    save_video(final)
+
+if __name__=="__main__":
+    # magnify_color()
+    magnify_motion()

@@ -130,7 +130,6 @@ def laplacian_video(video_tensor,levels=3):
         vid_1[i] = l1
         vid_2[i] = l2
         vid_3[i] = l3
-    print(vid_1.shape)
     tensor_list=[vid_1,vid_2,vid_3]
     return tensor_list
 
@@ -158,8 +157,6 @@ def reconstrct_from_tensorlist(filter_tensor_list):
         up=up+filter_tensor_list[2][i]
         final[i]=up
     return final
-
-
 
 def magnify_motion():
     t,f=load_video("baby.mp4")

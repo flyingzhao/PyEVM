@@ -36,7 +36,6 @@ def build_gaussian_pyramid(src,level=3):
 #Build Laplacian Pyramid
 def build_laplacian_pyramid(src,levels=3):
     gaussianPyramid = build_gaussian_pyramid(src, levels)
-    s=src.copy()
     pyramid=[]
     for i in range(levels,0,-1):
         GE=cv2.pyrUp(gaussianPyramid[i])
@@ -117,44 +116,31 @@ def magnify_color():
     save_video(final)
 
 def laplacian_video(video_tensor,levels=3):
+    tensor_list=[]
     for i in range(0,video_tensor.shape[0]):
         frame=video_tensor[i]
         pyr=build_laplacian_pyramid(frame,levels=levels)
-        l1=pyr[0]
-        l2=pyr[1]
-        l3=pyr[2]
         if i==0:
-            vid_1=np.zeros((video_tensor.shape[0],l1.shape[0],l1.shape[1],3))
-            vid_2=np.zeros((video_tensor.shape[0],l2.shape[0],l2.shape[1],3))
-            vid_3 = np.zeros((video_tensor.shape[0], l3.shape[0], l3.shape[1], 3))
-        vid_1[i] = l1
-        vid_2[i] = l2
-        vid_3[i] = l3
-    tensor_list=[vid_1,vid_2,vid_3]
+            for k in range(levels):
+                tensor_list.append(np.zeros((video_tensor.shape[0],pyr[k].shape[0],pyr[k].shape[1],3)))
+        for n in range(levels):
+            tensor_list[n][i] = pyr[n]
     return tensor_list
 
-def iir_filter(lap_tensor):
-    return butter_bandpass_filter(lap_tensor,0.4,3,30)
-
-def butter_bandpass(lowcut, highcut, fs, order=5):
-    nyq = 0.5 * fs
-    low = lowcut / nyq
-    high = highcut / nyq
-    b, a = signal.butter(order, [low, high], btype='band')
-    return b, a
-
 def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
-    b, a = butter_bandpass(lowcut, highcut, fs, order=order)
+    omega = 0.5 * fs
+    low = lowcut / omega
+    high = highcut / omega
+    b, a = signal.butter(order, [low, high], btype='band')
     y = signal.lfilter(b, a, data, axis=0)
     return y
 
-def reconstrct_from_tensorlist(filter_tensor_list):
-    final=np.zeros(filter_tensor_list[2].shape)
+def reconstrct_from_tensorlist(filter_tensor_list,levels=3):
+    final=np.zeros(filter_tensor_list[-1].shape)
     for i in range(filter_tensor_list[0].shape[0]):
-        up=cv2.pyrUp(filter_tensor_list[0][i])
-        up=up+filter_tensor_list[1][i]
-        up=cv2.pyrUp(up)
-        up=up+filter_tensor_list[2][i]
+        up = filter_tensor_list[0][i]
+        for n in range(levels-1):
+            up=cv2.pyrUp(up)+filter_tensor_list[n+1][i]
         final[i]=up
     return final
 
@@ -163,7 +149,7 @@ def magnify_motion():
     lap_video_list=laplacian_video(t,levels=3)
     filter_tensor_list=[]
     for i in range(3):
-        filter_tensor=iir_filter(lap_video_list[i])
+        filter_tensor=butter_bandpass_filter(lap_video_list[i],0.4,3,30)
         filter_tensor*=20
         filter_tensor_list.append(filter_tensor)
     recon=reconstrct_from_tensorlist(filter_tensor_list)

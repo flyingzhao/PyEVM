@@ -18,7 +18,7 @@ def rgb2ntsc(src):
 def ntsc2rbg(src):
     [rows, cols] = src.shape[:2]
     dst=np.zeros((rows,cols,3),dtype=np.float64)
-    T = np.array([[1, -1.108, 1.705], [1, -0.272, -0.647], [1, 0.956, 0.620]])    #todo:T改成矩阵的逆
+    T = np.array([[1, -1.108, 1.705], [1, -0.272, -0.647], [1, 0.956, 0.620]])
     for i in range(rows):
         for j in range(cols):
             dst[i, j]=np.dot(T,src[i,j])
@@ -98,7 +98,7 @@ def reconstract_video(amp_video,origin_video,levels=3):
         final_video[i]=img
     return final_video
 
-#save cideo to files
+#save video to files
 def save_video(video_tensor):
     fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
     [height,width]=video_tensor[0].shape[0:2]
@@ -107,14 +107,16 @@ def save_video(video_tensor):
         writer.write(cv2.convertScaleAbs(video_tensor[i]))
     writer.release()
 
-def magnify_color():
-    t,f=load_video("baby.mp4")
-    gau_video=gaussian_video(t,levels=3)
-    filtered_tensor=temporal_ideal_filter(gau_video,0.83,1,f)
-    amplified_video=amplify_video(filtered_tensor,amplification=100)
+#magnify color
+def magnify_color(video_name,low,high,levels=3,amplification=20):
+    t,f=load_video(video_name)
+    gau_video=gaussian_video(t,levels=levels)
+    filtered_tensor=temporal_ideal_filter(gau_video,low,high,f)
+    amplified_video=amplify_video(filtered_tensor,amplification=amplification)
     final=reconstract_video(amplified_video,t,levels=3)
     save_video(final)
 
+#build laplacian pyramid for video
 def laplacian_video(video_tensor,levels=3):
     tensor_list=[]
     for i in range(0,video_tensor.shape[0]):
@@ -127,6 +129,7 @@ def laplacian_video(video_tensor,levels=3):
             tensor_list[n][i] = pyr[n]
     return tensor_list
 
+#butterworth bandpass filter
 def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     omega = 0.5 * fs
     low = lowcut / omega
@@ -135,27 +138,29 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     y = signal.lfilter(b, a, data, axis=0)
     return y
 
-def reconstrct_from_tensorlist(filter_tensor_list,levels=3):
+#reconstract video from laplacian pyramid
+def reconstract_from_tensorlist(filter_tensor_list,levels=3):
     final=np.zeros(filter_tensor_list[-1].shape)
     for i in range(filter_tensor_list[0].shape[0]):
         up = filter_tensor_list[0][i]
         for n in range(levels-1):
-            up=cv2.pyrUp(up)+filter_tensor_list[n+1][i]
+            up=cv2.pyrUp(up)+filter_tensor_list[n + 1][i]#可以改为up=cv2.pyrUp(up)
         final[i]=up
     return final
 
-def magnify_motion():
-    t,f=load_video("baby.mp4")
-    lap_video_list=laplacian_video(t,levels=3)
+#manify motion
+def magnify_motion(video_name,low,high,levels=3,amplification=20):
+    t,f=load_video(video_name)
+    lap_video_list=laplacian_video(t,levels=levels)
     filter_tensor_list=[]
-    for i in range(3):
-        filter_tensor=butter_bandpass_filter(lap_video_list[i],0.4,3,30)
-        filter_tensor*=20
+    for i in range(levels):
+        filter_tensor=butter_bandpass_filter(lap_video_list[i],low,high,f)
+        filter_tensor*=amplification
         filter_tensor_list.append(filter_tensor)
-    recon=reconstrct_from_tensorlist(filter_tensor_list)
+    recon=reconstract_from_tensorlist(filter_tensor_list)
     final=t+recon
     save_video(final)
 
 if __name__=="__main__":
-    # magnify_color()
-    magnify_motion()
+    # magnify_color("baby.mp4",0.4,3)
+    magnify_motion("baby.mp4",0.4,3)

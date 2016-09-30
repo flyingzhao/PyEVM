@@ -15,7 +15,7 @@ pip install opencv_python-3.1.0-cp35-cp35m-win_amd64.whl
 ```
 
 ##Other Libraries
-* SciPy fot signal processing
+* SciPy for signal processing
 * NumPy for image processing
 
 ##Result

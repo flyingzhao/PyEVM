@@ -5,6 +5,8 @@ This is a python implementation of eulerian video magnification《[Eulerian Vide
 
 ##Install OpenCV3
 Since the OpenCV3.X does not support Python3, you need to install opencv3 manually.
+
+Firstly,download opencv3 for python3:
 >OpenCV3 for Python3: http://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv
 
 Then install opencv3 with pip:

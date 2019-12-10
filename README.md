@@ -12,8 +12,11 @@ pip install -r requirements.txt
 ```
 
 needed libraries are:
+numpy (1.17.4)
+opencv-python (4.1.2.30)
+scipy (1.3.3)
 
-![requirements.txt](requirements.txt)
+see [requirements.txt](requirements.txt)
 
 # modes
 Two modes are implemented. A color change and a motion change.

@@ -1,2 +1,4 @@
 .idea/
 videos/
+*.pyc
+__pycache__/

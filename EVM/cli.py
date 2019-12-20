@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Volker Göhler 2019
+# Volker Göhler 2019,2020
 
 import argparse
 import logging

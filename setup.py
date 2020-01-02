@@ -75,9 +75,9 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         # eg: 'aspectlib==1.1.1', 'six>=1.7',
-        'numpy==1.17.4',
+        'numpy==1.18.0',
         'opencv-python==4.1.2.30',
-        'scipy==1.3.3'
+        'scipy==1.4.1'
     ],
     extras_require={
         # eg:

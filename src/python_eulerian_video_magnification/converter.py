@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# Volker Göhler 2019,2020
 
 import numpy as np
 

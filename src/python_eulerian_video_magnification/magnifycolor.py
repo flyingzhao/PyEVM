@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-# Volker Göhler 2019,2020
 
 import cv2
 import numpy as np
 
-from EVM.filter import temporal_ideal_filter
-from EVM.magnify import Magnify
-from EVM.pyramid import gaussian_video
+from python_eulerian_video_magnification.filter import temporal_ideal_filter
+from python_eulerian_video_magnification.magnify import Magnify
+from python_eulerian_video_magnification.pyramid import gaussian_video
 
 
 class MagnifyColor(Magnify):

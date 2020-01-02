@@ -63,7 +63,7 @@ Installation
 
 ::
 
-    ~~pip install PyEVM~~
+    <!--~~pip install PyEVM~~-->
 
 You can also install the in-development version with::
 
@@ -74,6 +74,19 @@ needed libraries (that get automatically installed) are:
 - numpy (1.17.4)
 - opencv-python (4.1.2.30)
 - scipy (1.3.3)
+
+
+Running
+=======
+
+Navigate to sources directory and use
+
+::
+
+   python3 -mpython_eulerian_video_magnification
+
+if you just want to execute the code.
+
 
 Documentation
 =============

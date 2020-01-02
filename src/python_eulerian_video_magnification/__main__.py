@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Entrypoint module, in case you use `python -mpython_eulerian_video_magnification`.
 

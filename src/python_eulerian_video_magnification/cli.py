@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-# Volker Göhler 2019,2020
-# orig work: https://github.com/flyingzhao/PyEVM
-
 """
 Module that contains the command line app.
 
@@ -23,11 +20,9 @@ import argparse
 import os.path
 from typing import IO
 
-from mode import Mode
-
-from magnifycolor import MagnifyColor
-from magnifymotion import MagnifyMotion
-from mode import Mode
+from python_eulerian_video_magnification.magnifycolor import MagnifyColor
+from python_eulerian_video_magnification.magnifymotion import MagnifyMotion
+from python_eulerian_video_magnification.mode import Mode
 
 
 class CLI:
@@ -62,10 +57,6 @@ class CLI:
         self.args = parser.parse_args()
 
         self.__sanitize_input()
-
-        ## logic steps
-        # copy input to video/original folder
-        # create the result video in video/result/{originalname}_{methodname}
 
     def __sanitize_input(self):
         """ This checks for further conditions in input args """

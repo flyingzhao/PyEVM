@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from scipy import signal as signal, fftpack as fftpack
+from scipy import fftpack as fftpack
+from scipy import signal as signal
 
 
 def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):

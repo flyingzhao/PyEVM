@@ -15,8 +15,8 @@ Why does this file exist, and why not put this in __main__?
 
   Also see (1) from http://click.pocoo.org/5/setuptools/#setuptools-integration
 """
-import logging
 import argparse
+import logging
 import os.path
 from typing import IO
 
@@ -125,4 +125,3 @@ def main(args=None):
 
     Magnify(cli.get_file.name, low=cli.get_low, high=cli.get_high, levels=cli.get_levels,
             amplification=cli.get_amplification)
-

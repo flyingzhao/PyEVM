@@ -1,6 +1,6 @@
 virtualenv>=16.6.0
 pip>=19.1.1
 setuptools>=18.0.1
-numpy==1.18.0
-opencv-python==4.1.2.30
-scipy==1.4.1
+numpy>=1.18.0
+opencv-python>=4.1.2.30
+scipy>=1.4.1 

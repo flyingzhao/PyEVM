@@ -14,12 +14,6 @@ matrix:
       env:
         - TOXENV=docs
     - env:
-        - TOXENV=py27,codecov,coveralls
-      python: '2.7'
-    - env:
-        - TOXENV=py35,codecov,coveralls
-      python: '3.5'
-    - env:
         - TOXENV=py36,codecov,coveralls
       python: '3.6'
     - env:
@@ -28,9 +22,6 @@ matrix:
     - env:
         - TOXENV=py38,codecov,coveralls
       python: '3.8'
-    - env:
-        - TOXENV=pypy,codecov,coveralls
-      python: 'pypy'
     - env:
         - TOXENV=pypy3,codecov,coveralls
         - TOXPYTHON=pypy3

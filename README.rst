@@ -14,8 +14,8 @@ Overview
         | |coveralls| |codecov|
     * - package
       - | |commits-since|
-.. |docs| image:: https://readthedocs.org/projects/PyEVM/badge/?style=flat
-    :target: https://readthedocs.org/projects/PyEVM
+.. |docs| image:: https://readthedocs.org/projects/pyevm/badge/?style=flat
+    :target: https://readthedocs.org/projects/pyevm
     :alt: Documentation Status
 
 .. |travis| image:: https://api.travis-ci.org/vgoehler/PyEVM.svg?branch=master
@@ -32,9 +32,9 @@ Overview
 
 .. |coveralls| image:: https://coveralls.io/repos/vgoehler/PyEVM/badge.svg?branch=master&service=github
     :alt: Coverage Status
-    :target: https://coveralls.io/r/vgoehler/PyEVM
+    :target: https://coveralls.io/github/vgoehler/PyEVM
 
-.. |codecov| image:: https://codecov.io/github/vgoehler/PyEVM/coverage.svg?branch=master
+.. |codecov| image:: https://codecov.io/gh/vgoehler/PyEVM/branch/master/graphs/badge.svg?branch=master
     :alt: Coverage Status
     :target: https://codecov.io/github/vgoehler/PyEVM
 

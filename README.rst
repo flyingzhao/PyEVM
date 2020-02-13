@@ -93,22 +93,27 @@ Usage
 =====
 
 optional arguments:
-  -h, --help            show this help message and exit
+  ================================================ ====================================================
+  ``-h, --help``                                    show this help message and exit
+  ================================================ ====================================================
 
 system arguments:
-  input                 the input video file to work on
-  -o [O]                output-folder
-  --color_suffix [COLOR_SUFFIX]                        the suffix to use for color modified result files
-  --motion_suffix [MOTION_SUFFIX]                        the suffix to use for motion modified result files
-  --log {debug,info,warning,error,critical}                        log level
+  ================================================ ====================================================
+  ``input``                                          the input video file to work on
+  ``-o [O]``                                         output-folder
+  ``--color_suffix [COLOR_SUFFIX]``                  the suffix to use for color modified result files
+  ``--motion_suffix [MOTION_SUFFIX]``                the suffix to use for motion modified result files
+  ``--log {debug,info,warning,error,critical}``      log level
+  ================================================ ====================================================
 
 parameters:
-  -m {color,motion}     mode
-  -c LOW, --low LOW     low parameter (creek)
-  -p HIGH, --high HIGH  high parameter (peek)
-  -l LEVELS, --levels LEVELS                        levels parameter
-  -a AMPLIFICATION, --amplification AMPLIFICATION                        amplification parameter
-
+  =================================================== ====================================================
+  ``-m {color,motion}``                                mode
+  ``-c LOW, --low LOW``                                low parameter (creek)
+  ``-p HIGH, --high HIGH``                             high parameter (peek)
+  ``-l LEVELS, --levels LEVELS``                       levels parameter
+  ``-a AMPLIFICATION, --amplification AMPLIFICATION``  amplification parameter
+  =================================================== ====================================================
 
 Documentation
 =============

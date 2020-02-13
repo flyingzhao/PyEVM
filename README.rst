@@ -61,19 +61,21 @@ It now has an operational command line interface and is install able.
 Installation
 ============
 
+Up until now it is not available with PyPI, but if it will be you could use this code to install it.
+
 ::
 
-    <!--~~pip install PyEVM~~-->
+    pip install PyEVM
 
-You can also install the in-development version with::
+You can install the in-development version with::
 
     pip install https://github.com/vgoehler/PyEVM/archive/master.zip
 
 needed libraries (that get automatically installed) are:  
 
-- numpy (1.17.4)
-- opencv-python (4.1.2.30)
-- scipy (1.3.3)
+- numpy (>=1.17.4)
+- opencv-python (>=4.1.2.30)
+- scipy (>=1.3.3)
 
 
 Running
@@ -83,15 +85,33 @@ Navigate to sources directory and use
 
 ::
 
-   python3 -mpython_eulerian_video_magnification
+   python3 -mpython_eulerian_video_magnification inputfile.video
 
 if you just want to execute the code.
+
+Usage
+=====
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+system arguments:
+  input                 the input video file to work on
+  -o [O]                output-folder
+  --color_suffix [COLOR_SUFFIX]                        the suffix to use for color modified result files
+  --motion_suffix [MOTION_SUFFIX]                        the suffix to use for motion modified result files
+  --log {debug,info,warning,error,critical}                        log level
+
+parameters:
+  -m {color,motion}     mode
+  -c LOW, --low LOW     low parameter (creek)
+  -p HIGH, --high HIGH  high parameter (peek)
+  -l LEVELS, --levels LEVELS                        levels parameter
+  -a AMPLIFICATION, --amplification AMPLIFICATION                        amplification parameter
 
 
 Documentation
 =============
-
-Two modes are implemented. A color change and a motion change.
 
 
 https://PyEVM.readthedocs.io/
@@ -100,7 +120,7 @@ https://PyEVM.readthedocs.io/
 Development
 ===========
 
-To run the all tests run::
+To run all tests run::
 
     tox
 

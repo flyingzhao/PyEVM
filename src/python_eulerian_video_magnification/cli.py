@@ -70,7 +70,7 @@ class CLI:
             # we got a valid (at least according to extension) file
             pass
         else:
-            logging.CRITICAL("Input is not a video file. Only supports %s" % ", ".join(formats))
+            logging.critical("Input is not a video file. Only supports %s" % ", ".join(formats))
             SystemExit()
 
     def __manage_output_folder(self):
@@ -116,12 +116,12 @@ def main(args=None):
     # create magnification correct Object
     if cli.get_mode == Mode.COLOR:
         print("Starting Magnification in Color Mode")
-        Magnify = MagnifyColor
+        magnify = MagnifyColor
     elif cli.get_mode == Mode.MOTION:
         print("Starting Magnification in Motion Mode")
-        Magnify = MagnifyMotion
+        magnify = MagnifyMotion
     else:
         raise NotImplementedError("Unknown Mode")
 
-    Magnify(cli.get_file.name, low=cli.get_low, high=cli.get_high, levels=cli.get_levels,
+    magnify(cli.get_file.name, low=cli.get_low, high=cli.get_high, levels=cli.get_levels,
             amplification=cli.get_amplification)

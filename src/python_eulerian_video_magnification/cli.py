@@ -18,6 +18,7 @@ Why does this file exist, and why not put this in __main__?
 import argparse
 import logging
 import os.path
+import sys
 from typing import IO
 
 from python_eulerian_video_magnification.magnifycolor import MagnifyColor
@@ -29,11 +30,15 @@ class CLI:
     """The command line interface for evm"""
 
     def __init__(self):
-        parser = argparse.ArgumentParser(description='This starts eulerian video magnification on the command line',
-                                         epilog='volker.goehler@informatik.tu-freiberg.de'
-                                         )
+        self.args = None
+        self.parser = argparse.ArgumentParser(
+            description='This starts eulerian video magnification on the command line',
+            epilog='volker.goehler@informatik.tu-freiberg.de',
+            prog=os.path.split(sys.argv[0])[-1] if '__main__' not in sys.argv[0] else 'eulerian_video_magnification '
+            )
+        # prog parameter is a fix if the program is called from module level
         # io group
-        io_group = parser.add_argument_group("system arguments")
+        io_group = self.parser.add_argument_group("system arguments")
         io_group.add_argument('input', type=argparse.FileType('r'), help="the input video file to work on")
         # TODO meta information for each file worked on, orig filename, timestamp start and end, size, parameter count
         io_group.add_argument('-o', help='output-folder', nargs='?', default=os.path.join(os.path.curdir, "videos"),
@@ -47,15 +52,15 @@ class CLI:
                               default="warning")
 
         # arguments
-        arg_group = parser.add_argument_group("parameters")
+        arg_group = self.parser.add_argument_group("parameters")
         arg_group.add_argument('-m', help='mode', choices=['color', 'motion'], default='color')
         arg_group.add_argument('-c', '--low', default=0.4, type=float, help="low parameter (creek)")
         arg_group.add_argument('-p', '--high', default=3, type=float, help="high parameter (peek)")
         arg_group.add_argument('-l', '--levels', default=3, type=int, help="levels parameter")
         arg_group.add_argument('-a', '--amplification', default=20, type=int, help="amplification parameter")
 
-        self.args = parser.parse_args()
-
+    def parse(self, args: list):
+        self.args = self.parser.parse_args(args=args)
         self.__sanitize_input()
 
     def __sanitize_input(self):
@@ -110,6 +115,7 @@ class CLI:
 
 def main(args=None):
     cli = CLI()
+    cli.parse(args=args)
 
     logging.basicConfig(level=cli.get_log_level)
 

@@ -35,7 +35,7 @@ class CLI:
             description='This starts eulerian video magnification on the command line',
             epilog='volker.goehler@informatik.tu-freiberg.de',
             prog=os.path.split(sys.argv[0])[-1] if '__main__' not in sys.argv[0] else 'eulerian_video_magnification '
-            )
+        )
         # prog parameter is a fix if the program is called from module level
         # io group
         io_group = self.parser.add_argument_group("system arguments")
@@ -53,7 +53,9 @@ class CLI:
 
         # arguments
         arg_group = self.parser.add_argument_group("parameters")
-        arg_group.add_argument('-m', help='mode', choices=['color', 'motion'], default='color')
+        arg_group.add_argument('-m', '--mode', help='the mode of the operation, either enhance colors or motions',
+                               type=Mode.from_string,
+                               choices=list(Mode), default=Mode.COLOR)
         arg_group.add_argument('-c', '--low', default=0.4, type=float, help="low parameter (creek)")
         arg_group.add_argument('-p', '--high', default=3, type=float, help="high parameter (peek)")
         arg_group.add_argument('-l', '--levels', default=3, type=int, help="levels parameter")
@@ -70,18 +72,18 @@ class CLI:
 
     def __check_for_video_file(self):
         """ we check if the input file is valid """
-        formats = ('avi', 'mpg', 'mpeg')
-        if os.path.splitext(self.args.input) in (".%s" % ext for ext in formats):
+        formats = ('avi', 'mpg', 'mpeg', 'mp4')
+        if os.path.splitext(self.args.input.name)[-1] in (".%s" % ext for ext in formats):
             # we got a valid (at least according to extension) file
             pass
         else:
             logging.critical("Input is not a video file. Only supports %s" % ", ".join(formats))
-            SystemExit()
+            sys.exit(10)
 
     def __manage_output_folder(self):
         """ in case the output folder is not existent we create it """
-        if not os.path.exists(self.args.output_folder):
-            os.makedirs(self.args.output_folder)
+        if not os.path.exists(self.output_folder):
+            os.makedirs(self.output_folder)
 
     @property
     def get_log_level(self) -> int:
@@ -89,19 +91,20 @@ class CLI:
         return getattr(logging, self.args.logging.upper(), None)
 
     @property
-    def get_mode(self) -> int:
-        return getattr(Mode, self.args.mode.upper(), None)
+    def get_mode(self) -> Mode:
+        logging.debug(self.args)
+        return self.args.mode
 
     @property
     def get_file(self) -> IO:
         return self.args.input
 
     @property
-    def get_low(self) -> int:
+    def get_low(self) -> float:
         return self.args.low
 
     @property
-    def get_high(self) -> int:
+    def get_high(self) -> float:
         return self.args.high
 
     @property
@@ -111,6 +114,10 @@ class CLI:
     @property
     def get_amplification(self) -> int:
         return self.args.amplification
+
+    @property
+    def output_folder(self) -> str:
+        return self.args.o
 
 
 def main(args=None):

@@ -8,4 +8,6 @@ def test_main_as_smoke_test_wrong_filename():
     """This tests the setup of main for wrong input file only as a smoke test, as I'm not testing arparse"""
     with pytest.raises(SystemExit) as e:
         main(['fu.bar'])
-    assert "2" in str(e.value)
+    assert 2 == e.value.code
+    assert "fu.bar" == e.value.args
+    assert 0

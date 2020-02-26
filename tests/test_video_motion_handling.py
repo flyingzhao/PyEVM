@@ -1,10 +1,12 @@
-import unittest
+import os
+
+import pytest
+
+from python_eulerian_video_magnification.cli import main
+
+sample = os.path.join(os.getcwd(), 'tests', 'videos', 'guitar1sec.mp4')
 
 
-class MyTestCase(unittest.TestCase):
-    def test_something(self):
-        self.assertEqual(True, False)
-
-
-if __name__ == '__main__':
-    unittest.main()
+def test_process_video(tmp_path):
+    main([sample, '-o %s' % tmp_path])
+    assert 0

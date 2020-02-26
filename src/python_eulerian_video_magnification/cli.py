@@ -47,7 +47,7 @@ class CLI:
                               type=str, default='color')
         io_group.add_argument('--motion_suffix', help='the suffix to use for motion modified result files', nargs='?',
                               type=str, default='motion')
-        io_group.add_argument('--log', help="log level", choices=["debug", "info", "warning", "error", "critical"],
+        io_group.add_argument('--loglevel', help="log level", choices=["debug", "info", "warning", "error", "critical"],
                               type=str,
                               default="warning")
 
@@ -88,7 +88,8 @@ class CLI:
     @property
     def get_log_level(self) -> int:
         """ parses the input loglevel to the numeric value """
-        return getattr(logging, self.args.logging.upper(), None)
+        logging.debug(self.args)
+        return getattr(logging, self.args.loglevel.upper(), None)
 
     @property
     def get_mode(self) -> Mode:

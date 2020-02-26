@@ -40,7 +40,7 @@ def test_mode_default():
 
 def test_log_level_set():
     sut = cli.CLI()
-    sut.parse(args=[sample, '-l=warning'])
+    sut.parse(args=[sample, '--loglevel=warning'])
     assert sut.get_log_level == logging.WARNING, "log level should be warning"
 
 
@@ -68,4 +68,4 @@ def test_correctly_set_numeric(value, parameter_flag, method):
 
 def test_for_invalid_output_path():
     sut = cli.CLI()
-    sut.parse(args=['%s -o %s'])
+    sut.parse(args=[sample, '-o %s' % base_path('invalid.path')])

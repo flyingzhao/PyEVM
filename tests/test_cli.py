@@ -1,6 +1,5 @@
 import functools
 import logging
-import os
 import os.path
 
 import pytest

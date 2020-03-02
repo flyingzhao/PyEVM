@@ -131,11 +131,14 @@ def main(args=None):
     if cli.get_mode == Mode.COLOR:
         print("Starting Magnification in Color Mode")
         magnify = MagnifyColor
+        suffix = cli.args.color_suffix
     elif cli.get_mode == Mode.MOTION:
         print("Starting Magnification in Motion Mode")
         magnify = MagnifyMotion
+        suffix = cli.args.motion_suffix
     else:
         raise NotImplementedError("Unknown Mode")
 
-    magnify(cli.get_file.name, low=cli.get_low, high=cli.get_high, levels=cli.get_levels,
-            amplification=cli.get_amplification)
+    work = magnify(cli.get_file.name, low=cli.get_low, high=cli.get_high, levels=cli.get_levels,
+                   amplification=cli.get_amplification, suffix=suffix, output_folder=cli.args.o)
+    work.do_magnify()

@@ -27,3 +27,15 @@ class MagnifyColor(Magnify):
             img = img + origin_video[i]
             final_video[i] = img
         return final_video
+
+    def principal_component_analysis(self, tensor: np.ndarray):
+        # Data matrix tensor, assumes 0-centered
+        n, m = tensor.shape
+        assert np.allclose(tensor.mean(axis=0), np.zeros(m))
+        # Compute covariance matrix
+        covariance_matrix = np.dot(tensor.T, tensor) / (n - 1)
+        # Eigen decomposition
+        eigen_vals, eigen_vecs = np.linalg.eig(covariance_matrix)
+        # Project tensor onto PC space
+        X_pca = np.dot(tensor, eigen_vecs)
+        return X_pca

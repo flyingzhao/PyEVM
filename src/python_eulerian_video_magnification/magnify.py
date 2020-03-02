@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
+import os.path
+
 import cv2
 import numpy as np
 
 
 class Magnify:
-    def __init__(self, video_filename: str, low: float, high: float, levels: int = 3, amplification: int = 20):
+    def __init__(self, video_filename: str, output_folder: str, low: float, high: float, suffix: str, levels: int = 3,
+                 amplification: int = 20):
         self._low = low
         self._high = high
         self._levels = levels
         self._amplification = amplification
-        self._out_file_name = "out.avi"
+        self._out_file_name = Magnify.output_file_name(video_filename, suffix=suffix, path=output_folder)
         self._in_file_name = video_filename
 
     def load_video(self) -> (np.ndarray, int):
@@ -29,7 +32,8 @@ class Magnify:
         return video_tensor, fps
 
     def save_video(self, video_tensor: np.ndarray) -> None:
-        four_cc = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
+        # four_cc = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
+        four_cc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
         [height, width] = video_tensor[0].shape[0:2]
         writer = cv2.VideoWriter(self._out_file_name, four_cc, 30, (width, height), 1)
         for i in range(0, video_tensor.shape[0]):
@@ -43,3 +47,8 @@ class Magnify:
 
     def _magnify_impl(self, tensor: np.ndarray, fps: int) -> np.ndarray:
         raise NotImplementedError("This should be overwritten!")
+
+    @staticmethod
+    def output_file_name(filename: str, suffix: str, path: str):
+        filename_split = os.path.splitext(os.path.split(filename)[-1])
+        return os.path.join(path, filename_split[0] + "_%s_evm" % suffix + filename_split[1])

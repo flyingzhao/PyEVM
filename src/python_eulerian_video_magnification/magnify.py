@@ -53,7 +53,7 @@ class Magnify:
         return self._data['high']
 
     @property
-    def _levels(self) -> float:
+    def _levels(self) -> int:
         return self._data['levels']
 
     @property

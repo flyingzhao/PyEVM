@@ -1,3 +1,5 @@
+import os.path
+
 from python_eulerian_video_magnification.metadata import MetaData
 from python_eulerian_video_magnification.mode import Mode
 
@@ -32,4 +34,19 @@ def test_for_data_as_expected():
                                                'target': "/out/put/gob_color_evm.avi",
                                                'meta_target': "/out/put/gob_color_evm.json", 'low': 0.1, 'high': 2.1,
                                                'levels': 4,
-                                               'amplification': 23, 'mode': 'COLOR', 'suffix': 'color'}
+                                               'amplification': 23, 'mode': 'COLOR', 'suffix': 'color', 'date': None}
+
+
+def test_json_save(tmp_path):
+    sut = MetaData(
+        file_name="/fu/bar/gob.avi",
+        output_folder=str(tmp_path),
+        mode=Mode.COLOR,
+        suffix="color",
+        low=0.1,
+        high=2.1,
+        levels=4,
+        amplification=23
+    )
+    sut.save_meta_data()
+    assert os.path.exists(sut['meta_target'])

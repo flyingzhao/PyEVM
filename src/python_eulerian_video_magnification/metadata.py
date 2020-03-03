@@ -1,5 +1,6 @@
-
+import json
 import os.path
+from datetime import datetime
 
 from python_eulerian_video_magnification.mode import Mode
 
@@ -21,7 +22,8 @@ class MetaData:
             'levels': levels,
             'amplification': amplification,
             'mode': mode.name,
-            'suffix': suffix
+            'suffix': suffix,
+            'date': None,
         }
 
     @staticmethod
@@ -32,3 +34,10 @@ class MetaData:
 
     def __getitem__(self, item):
         return self.__data[item]
+
+    def save_meta_data(self):
+        """stores the meta data dictionary as a json"""
+        self.__data['date'] = str(datetime.now())
+        with open(self.__data['meta_target'], 'w') as fp:
+            json.dump(self.__data, fp=fp, sort_keys=True, indent=4, separators=(',', ': '))
+

@@ -39,6 +39,7 @@ class Magnify:
         tensor, fps = self.load_video()
         video_tensor = self._magnify_impl(tensor, fps)
         self.save_video(video_tensor)
+        self._data.save_meta_data()
 
     def _magnify_impl(self, tensor: np.ndarray, fps: int) -> np.ndarray:
         raise NotImplementedError("This should be overwritten!")

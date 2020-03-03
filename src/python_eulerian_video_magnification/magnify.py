@@ -3,16 +3,12 @@ import os.path
 import cv2
 import numpy as np
 
+from python_eulerian_video_magnification.metadata import MetaData
+
 
 class Magnify:
-    def __init__(self, video_filename: str, output_folder: str, low: float, high: float, suffix: str, levels: int = 3,
-                 amplification: int = 20):
-        self._low = low
-        self._high = high
-        self._levels = levels
-        self._amplification = amplification
-        self._out_file_name = Magnify.output_file_name(video_filename, suffix=suffix, path=output_folder)
-        self._in_file_name = video_filename
+    def __init__(self, data: MetaData):
+        self._data = data
 
     def load_video(self) -> (np.ndarray, int):
         cap = cv2.VideoCapture(self._in_file_name)
@@ -47,7 +43,26 @@ class Magnify:
     def _magnify_impl(self, tensor: np.ndarray, fps: int) -> np.ndarray:
         raise NotImplementedError("This should be overwritten!")
 
-    @staticmethod
-    def output_file_name(filename: str, suffix: str, path: str):
-        filename_split = os.path.splitext(os.path.split(filename)[-1])
-        return os.path.join(path, filename_split[0] + "_%s_evm" % suffix + filename_split[1])
+    @property
+    def _low(self) -> float:
+        return self._data['low']
+
+    @property
+    def _high(self) -> float:
+        return self._data['high']
+
+    @property
+    def _levels(self) -> float:
+        return self._data['levels']
+
+    @property
+    def _amplification(self) -> float:
+        return self._data['amplification']
+
+    @property
+    def _in_file_name(self) -> str:
+        return self._data['file']
+
+    @property
+    def _out_file_name(self) -> str:
+        return self._data['target']

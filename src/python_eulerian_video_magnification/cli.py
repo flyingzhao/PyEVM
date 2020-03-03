@@ -22,6 +22,7 @@ from typing import IO
 
 from python_eulerian_video_magnification.magnifycolor import MagnifyColor
 from python_eulerian_video_magnification.magnifymotion import MagnifyMotion
+from python_eulerian_video_magnification.metadata import MetaData
 from python_eulerian_video_magnification.mode import Mode
 
 
@@ -138,6 +139,16 @@ def main(args=None):
     else:
         raise NotImplementedError("Unknown Mode")
 
-    work = magnify(cli.get_file.name, low=cli.get_low, high=cli.get_high, levels=cli.get_levels,
-                   amplification=cli.get_amplification, suffix=suffix, output_folder=cli.args.o)
+    meta_data = MetaData(
+        file_name=cli.get_file.name,
+        output_folder=cli.args.o,
+        mode=cli.get_mode,
+        suffix=suffix,
+        low=cli.get_low,
+        high=cli.get_high,
+        levels=cli.get_levels,
+        amplification=cli.get_amplification
+    )
+
+    work = magnify(meta_data)
     work.do_magnify()

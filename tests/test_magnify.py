@@ -1,4 +1,5 @@
 import pytest
+
 from python_eulerian_video_magnification.magnify import Magnify
 from python_eulerian_video_magnification.metadata import MetaData
 from python_eulerian_video_magnification.mode import Mode

@@ -40,4 +40,3 @@ class MetaData:
         self.__data['date'] = str(datetime.now())
         with open(self.__data['meta_target'], 'w') as fp:
             json.dump(self.__data, fp=fp, sort_keys=True, indent=4, separators=(',', ': '))
-

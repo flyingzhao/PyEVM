@@ -3,8 +3,8 @@ import logging
 import os.path
 
 import pytest
-from python_eulerian_video_magnification import cli
 
+from python_eulerian_video_magnification import cli
 from python_eulerian_video_magnification.mode import Mode
 
 base_path = functools.partial(os.path.join, os.getcwd(), 'tests', 'videos')

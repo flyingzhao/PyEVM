@@ -9,13 +9,12 @@ sample = os.path.join(os.getcwd(), 'tests', 'videos', 'guitar1sec.mp4')
 
 
 def test_process_video(tmp_path, capsys):
-    main([sample, '-o %s' % tmp_path])
+    main([sample, '-o', str(tmp_path)])
 
     captured = capsys.readouterr()
 
     assert "Starting Magnification in Color Mode" in captured.out
     assert os.path.isfile(MagnifyColor.output_file_name(filename=sample, suffix="color", path=tmp_path))
-    # findet tmp file nicht - obwohl da
 
 
 def test_output_filename():

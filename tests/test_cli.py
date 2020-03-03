@@ -65,6 +65,9 @@ def test_correctly_set_numeric(value, parameter_flag, method):
     assert getattr(sut, method) == value
 
 
-def test_for_invalid_output_path():
+def test_for_invalid_output_path(tmp_path):
     sut = cli.CLI()
-    sut.parse(args=[sample, '-o %s' % base_path('invalid.path')])
+    path = os.path.join(tmp_path, 'not_existent.path')
+    assert not os.path.exists(path)
+    sut.parse(args=[sample, '-o', '%s' % path])
+    assert os.path.exists(path)

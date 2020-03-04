@@ -21,7 +21,7 @@ class MagnifyColor(Magnify):
         for i in range(0, amp_video.shape[0]):
             img = amp_video[i]
             for x in range(self._levels):
-                img = cv2.pyrUp(img)
+                img = cv2.pyrUp(img)  # this doubles the dimensions of img each time
             img = img + origin_video[i]
             final_video[i] = img
         return final_video

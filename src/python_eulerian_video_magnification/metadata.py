@@ -37,7 +37,7 @@ class MetaData:
 
     def save_meta_data(self):
         """stores the meta data dictionary as a json"""
-        self.__data['date'] = self.get_date()
+        self.__data['date'] = MetaData.get_date()
         with open(self.__data['meta_target'], 'w') as fp:
             json.dump(self.__data, fp=fp, sort_keys=True, indent=4, separators=(',', ': '))
 

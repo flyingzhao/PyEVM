@@ -38,9 +38,9 @@ Overview
     :alt: Coverage Status
     :target: https://codecov.io/github/vgoehler/PyEVM
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/vgoehler/PyEVM/v0.4.0.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/vgoehler/PyEVM/v0.4.1.svg
     :alt: Commits since latest release
-    :target: https://github.com/vgoehler/PyEVM/compare/v0.4.0...master
+    :target: https://github.com/vgoehler/PyEVM/compare/v0.4.1...master
 
 
 

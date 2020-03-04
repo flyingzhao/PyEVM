@@ -20,7 +20,7 @@ project = 'Python Eulerian Video Magnification'
 year = '2019-2020'
 author = 'Volker G Göhler'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.4.0'
+version = release = '0.4.1'
 
 pygments_style = 'trac'
 templates_path = ['.']

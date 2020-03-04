@@ -17,14 +17,20 @@ class MagnifyColor(Magnify):
         return gaussian_vid * self._amplification
 
     def _reconstruct_video(self, amp_video, origin_video):
-        final_video = np.zeros(origin_video.shape)
+        origin_video_shape = origin_video.shape[1:]
         for i in range(0, amp_video.shape[0]):
             img = amp_video[i]
             for x in range(self._levels):
                 img = cv2.pyrUp(img)  # this doubles the dimensions of img each time
-            img = img + origin_video[i]
-            final_video[i] = img
-        return final_video
+            # ensure that dimensions are equal
+            origin_video[i] += self._correct_dimensionality_problem_after_pyr_up(img, origin_video_shape)
+        return origin_video
+
+    def _correct_dimensionality_problem_after_pyr_up(self, img: np.ndarray, origin_video_frame_shape) -> np.ndarray:
+        if img.shape != origin_video_frame_shape:
+            return np.resize(img, origin_video_frame_shape)
+        else:
+            return img
 
     def principal_component_analysis(self, tensor: np.ndarray):
         # Data matrix tensor, assumes 0-centered

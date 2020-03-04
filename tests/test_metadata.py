@@ -1,6 +1,5 @@
 import os.path
 
-from datetime import datetime
 from python_eulerian_video_magnification.metadata import MetaData
 from python_eulerian_video_magnification.mode import Mode
 

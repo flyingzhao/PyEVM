@@ -25,7 +25,7 @@ def read(*names, **kwargs):
 
 setup(
     name='PyEVM',
-    version='0.4.1',
+    version='0.4.2',
     license='BSD-2-Clause',
     description='Eulerian Video Magnification for Python',
     long_description='%s\n%s' % (

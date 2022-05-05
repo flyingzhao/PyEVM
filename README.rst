@@ -18,9 +18,9 @@ Overview
     :target: https://readthedocs.org/projects/pyevm
     :alt: Documentation Status
 
-.. |travis| image:: https://api.travis-ci.org/vgoehler/PyEVM.svg?branch=master
+.. |travis| image:: https://api.travis-ci.com/vgoehler/PyEVM.svg?branch=master
     :alt: Travis-CI Build Status
-    :target: https://travis-ci.org/vgoehler/PyEVM
+    :target: https://travis-ci.com/vgoehler/PyEVM
 
 .. |appveyor| image:: https://ci.appveyor.com/api/projects/status/github/vgoehler/PyEVM?branch=master&svg=true
     :alt: AppVeyor Build Status

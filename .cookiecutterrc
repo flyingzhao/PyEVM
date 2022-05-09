@@ -1,0 +1,69 @@
+# This file exists so you can easily regenerate your project.
+#
+# `cookiepatcher` is a convenient shim around `cookiecutter`
+# for regenerating projects (it will generate a .cookiecutterrc
+# automatically for any template). To use it:
+#
+#    pip install cookiepatcher
+#    cookiepatcher gh:ionelmc/cookiecutter-pylibrary project-path
+#
+# See:
+#    https://pypi.org/project/cookiepatcher
+#
+# Alternatively, you can run:
+#
+#    cookiecutter --overwrite-if-exists --config-file=project-path/.cookiecutterrc gh:ionelmc/cookiecutter-pylibrary
+
+default_context:
+
+    _extensions:               ['jinja2_time.TimeExtension']
+    _template:                 'gh:ionelmc/cookiecutter-pylibrary'
+    allow_tests_inside_package: 'no'
+    appveyor:                  'yes'
+    c_extension_function:      'longest'
+    c_extension_module:        '_python_eulerian_video_magnification'
+    c_extension_optional:      'no'
+    c_extension_support:       'no'
+    c_extension_test_pypi:     'no'
+    c_extension_test_pypi_username: 'vgoehler'
+    codacy:                    'no'
+    codacy_projectid:          '[Get ID from https://app.codacy.com/app/vgoehler/PyEVM/settings]'
+    codeclimate:               'no'
+    codecov:                   'yes'
+    command_line_interface:    'argparse'
+    command_line_interface_bin_name: 'EVM'
+    coveralls:                 'yes'
+    coveralls_token:           'CmhNs4cpmc7aNcp5FPB4sf379OiXLhufo'
+    distribution_name:         'PyEVM'
+    email:                     'volker.goehler@informatik.tu-freiberg.de'
+    full_name:                 'Volker G Göhler'
+    landscape:                 'no'
+    license:                   'BSD 2-Clause License'
+    linter:                    'flake8'
+    package_name:              'python_eulerian_video_magnification'
+    project_name:              'Python Eulerian Video Magnification'
+    project_short_description: 'Eulerian Video Magnification for Python'
+    pypi_badge:                'no'
+    pypi_disable_upload:       'yes'
+    release_date:              'today'
+    repo_hosting:              'github.com'
+    repo_hosting_domain:       'github.com'
+    repo_name:                 'PyEVM'
+    repo_username:             'vgoehler'
+    requiresio:                'yes'
+    scrutinizer:               'no'
+    setup_py_uses_setuptools_scm: 'no'
+    setup_py_uses_test_runner: 'no'
+    sphinx_docs:               'yes'
+    sphinx_docs_hosting:       'https://PyEVM.readthedocs.io/'
+    sphinx_doctest:            'no'
+    sphinx_theme:              'sphinx-rtd-theme'
+    test_matrix_configurator:  'no'
+    test_matrix_separate_coverage: 'no'
+    test_runner:               'pytest'
+    travis:                    'yes'
+    travis_osx:                'no'
+    version:                   '0.1.0'
+    website:                   'https://github.com/vgoehler'
+    year_from:                 '2019'
+    year_to:                   '2020'
